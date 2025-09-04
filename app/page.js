@@ -4,11 +4,25 @@ import { useEffect, useState } from "react";
 export default function DashboardPage() {
   const [content, setContent] = useState([]);
 
-  useEffect(() => {
+  const fetchContent = () => {
     fetch("/api/content")
       .then((res) => res.json())
       .then((data) => setContent(data));
+  };
+
+  useEffect(() => {
+    fetchContent();
   }, []);
+
+  const handleDelete = (id) => {
+    if (!confirm("Are you sure you want to delete this content?")) return;
+
+    fetch("/api/content", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id }),
+    }).then(() => fetchContent());
+  };
 
   return (
     <div>
@@ -21,6 +35,7 @@ export default function DashboardPage() {
               <th scope="col">Title</th>
               <th scope="col">Type</th>
               <th scope="col">Scheduled Time</th>
+              <th scope="col">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -30,11 +45,19 @@ export default function DashboardPage() {
                   <td>{item.title}</td>
                   <td className="text-capitalize">{item.type}</td>
                   <td>{new Date(item.schedule).toLocaleString()}</td>
+                  <td>
+                    <button
+                      className="btn btn-sm btn-danger"
+                      onClick={() => handleDelete(item.id)}
+                    >
+                      Delete
+                    </button>
+                  </td>
                 </tr>
               ))
             ) : (
               <tr>
-                <td colSpan="3" className="text-center text-muted py-4">
+                <td colSpan="4" className="text-center text-muted py-4">
                   No content available. Add some content!
                 </td>
               </tr>
