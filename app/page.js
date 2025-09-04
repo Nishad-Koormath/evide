@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 export default function DashboardPage() {
@@ -46,6 +47,12 @@ export default function DashboardPage() {
                   <td className="text-capitalize">{item.type}</td>
                   <td>{new Date(item.schedule).toLocaleString()}</td>
                   <td>
+                    <Link
+                      href={`edit/${item.id}`}
+                      className="btn btn-sm btn-primary me-2"
+                    >
+                      Edit
+                    </Link>
                     <button
                       className="btn btn-sm btn-danger"
                       onClick={() => handleDelete(item.id)}

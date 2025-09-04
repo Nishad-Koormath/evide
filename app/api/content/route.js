@@ -29,6 +29,22 @@ export async function POST(req) {
   }
 }
 
+export async function PUT(req) {
+  try {
+    const updatedItem = await req.json();
+    contentItems = contentItems.map((item) =>
+      item.id === updatedItem.id ? updatedItem : item
+    );
+
+    return Response.json({
+      message: `Content with id ${updatedItem.id} updated`,
+      item: updatedItem,
+    });
+  } catch (error) {
+    return new Response("Invalid request", { status: 400 });
+  }
+}
+
 export async function DELETE(req) {
   try {
     const { id } = await req.json();
