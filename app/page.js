@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 export default function DashboardPage() {
@@ -25,13 +26,19 @@ export default function DashboardPage() {
   };
 
   return (
-    <div>
-      <h2 className="h4 mb-4">Content List</h2>
+    <div className="px-2">
+      <div className="d-flex justify-content-between align-items-center mb-4">
+        <h2 className="h4 mb-0">Content List</h2>
+        <Link href="/add-content" className="btn btn-success">
+          Add Content
+        </Link>
+      </div>
 
-      <div className="table-responsive">
-        <table className="table table-bordered table-striped">
+      <div className="table-responsive shadow-sm rounded">
+        <table className="table table-bordered table-hover align-middle">
           <thead className="table-dark">
             <tr>
+              <th scope="col"></th>
               <th scope="col">Title</th>
               <th scope="col">Type</th>
               <th scope="col">Scheduled Time</th>
@@ -40,12 +47,19 @@ export default function DashboardPage() {
           </thead>
           <tbody>
             {content.length > 0 ? (
-              content.map((item, idx) => (
-                <tr key={idx}>
+              content.map((item, index) => (
+                <tr key={item.id}>
+                  <td>{index + 1}</td>
                   <td>{item.title}</td>
                   <td className="text-capitalize">{item.type}</td>
                   <td>{new Date(item.schedule).toLocaleString()}</td>
                   <td>
+                    <Link
+                      href={`edit/${item.id}`}
+                      className="btn btn-sm btn-primary me-2"
+                    >
+                      Edit
+                    </Link>
                     <button
                       className="btn btn-sm btn-danger"
                       onClick={() => handleDelete(item.id)}
@@ -57,7 +71,7 @@ export default function DashboardPage() {
               ))
             ) : (
               <tr>
-                <td colSpan="4" className="text-center text-muted py-4">
+                <td colSpan="5" className="text-center text-muted py-4">
                   No content available. Add some content!
                 </td>
               </tr>

@@ -1,30 +1,41 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
-export default function AddContentPage() {
+export default function EditContentPage({ params }) {
+  const { id } = params;
+  const router = useRouter();
+
   const [form, setForm] = useState({
+    id: "",
     title: "",
     type: "text",
     content: "",
     schedule: "",
   });
 
+  useEffect(() => {
+    fetch("/api/content")
+      .then((res) => res.json())
+      .then((data) => {
+        const item = data.find((c) => c.id === parseInt(id));
+        if (item) setForm(item);
+      });
+  }, [id]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
     fetch("/api/content", {
-      method: "POST",
+      method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(form),
-    }).then(() => {
-      alert("Content added!");
-      setForm({ title: "", type: "text", content: "", schedule: "" });
-    });
+    }).then(() => router.push("/"));
   };
 
   return (
     <div className="px-2">
-      <h2 className="h4 mb-4">Add New Content</h2>
+      <h2 className="h4 mb-4">Edit Content #{id}</h2>
 
       <div className="card shadow-sm mb-4">
         <div className="card-body">
@@ -35,7 +46,6 @@ export default function AddContentPage() {
               <input
                 type="text"
                 className="form-control"
-                placeholder="Enter title"
                 value={form.title}
                 onChange={(e) => setForm({ ...form, title: e.target.value })}
                 required
@@ -49,7 +59,6 @@ export default function AddContentPage() {
                 className="form-select"
                 value={form.type}
                 onChange={(e) => setForm({ ...form, type: e.target.value })}
-                required
               >
                 <option value="text">Text</option>
                 <option value="image">Image</option>
@@ -65,11 +74,6 @@ export default function AddContentPage() {
               <input
                 type="text"
                 className="form-control"
-                placeholder={
-                  form.type === "text"
-                    ? "Enter message text"
-                    : "Enter file URL"
-                }
                 value={form.content}
                 onChange={(e) => setForm({ ...form, content: e.target.value })}
                 required
@@ -78,7 +82,7 @@ export default function AddContentPage() {
 
             {/* Schedule */}
             <div className="col-md-6">
-              <label className="form-label">Schedule Time</label>
+              <label className="form-label">Schedule</label>
               <input
                 type="datetime-local"
                 className="form-control"
@@ -92,15 +96,15 @@ export default function AddContentPage() {
 
             {/* Buttons */}
             <div className="col-12 mt-3">
-              <button type="submit" className="btn btn-primary me-2">
-                Submit Content
+              <button type="submit" className="btn btn-success me-2">
+                Save Changes
               </button>
               <button
                 type="button"
                 className="btn btn-secondary"
-                onClick={() => setForm({ title: "", type: "text", content: "", schedule: "" })}
+                onClick={() => router.push("/")}
               >
-                Reset
+                Cancel
               </button>
             </div>
           </form>
