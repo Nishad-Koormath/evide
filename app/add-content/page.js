@@ -5,9 +5,20 @@ export default function AddContentPage() {
   const [form, setForm] = useState({
     title: "",
     type: "text",
-    content: "",
+    content: "", // text or Base64 for file
     schedule: "",
   });
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setForm({ ...form, content: reader.result });
+    };
+    reader.readAsDataURL(file); // convert file to Base64
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -48,7 +59,7 @@ export default function AddContentPage() {
               <select
                 className="form-select"
                 value={form.type}
-                onChange={(e) => setForm({ ...form, type: e.target.value })}
+                onChange={(e) => setForm({ ...form, type: e.target.value, content: "" })}
                 required
               >
                 <option value="text">Text</option>
@@ -57,23 +68,29 @@ export default function AddContentPage() {
               </select>
             </div>
 
-            {/* Content / File URL */}
+            {/* Content / File Upload */}
             <div className="col-12">
               <label className="form-label">
-                {form.type === "text" ? "Text Content" : "File URL"}
+                {form.type === "text" ? "Text Content" : "Upload File"}
               </label>
-              <input
-                type="text"
-                className="form-control"
-                placeholder={
-                  form.type === "text"
-                    ? "Enter message text"
-                    : "Enter file URL"
-                }
-                value={form.content}
-                onChange={(e) => setForm({ ...form, content: e.target.value })}
-                required
-              />
+              {form.type === "text" ? (
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Enter message text"
+                  value={form.content}
+                  onChange={(e) => setForm({ ...form, content: e.target.value })}
+                  required
+                />
+              ) : (
+                <input
+                  type="file"
+                  className="form-control"
+                  accept={form.type === "image" ? "image/*" : "video/*"}
+                  onChange={handleFileChange}
+                  required
+                />
+              )}
             </div>
 
             {/* Schedule */}
@@ -83,9 +100,7 @@ export default function AddContentPage() {
                 type="datetime-local"
                 className="form-control"
                 value={form.schedule}
-                onChange={(e) =>
-                  setForm({ ...form, schedule: e.target.value })
-                }
+                onChange={(e) => setForm({ ...form, schedule: e.target.value })}
                 required
               />
             </div>
