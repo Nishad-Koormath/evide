@@ -23,69 +23,89 @@ export default function AddContentPage() {
   };
 
   return (
-    <div>
+    <div className="px-2">
       <h2 className="h4 mb-4">Add New Content</h2>
 
-      <form onSubmit={handleSubmit} className="row g-3">
-        <div className="col-md-6">
-          <label className="form-label">Title</label>
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Enter title"
-            value={form.title}
-            onChange={(e) => setForm({ ...form, title: e.target.value })}
-            required
-          />
-        </div>
+      <div className="card shadow-sm mb-4">
+        <div className="card-body">
+          <form onSubmit={handleSubmit} className="row g-3">
+            {/* Title */}
+            <div className="col-md-6">
+              <label className="form-label">Title</label>
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Enter title"
+                value={form.title}
+                onChange={(e) => setForm({ ...form, title: e.target.value })}
+                required
+              />
+            </div>
 
-        <div className="col-md-6">
-          <label className="form-label">Type</label>
-          <select
-            className="form-select"
-            value={form.type}
-            onChange={(e) => setForm({ ...form, type: e.target.value })}
-            required
-          >
-            <option value="text">Text</option>
-            <option value="image">Image</option>
-            <option value="video">Video</option>
-          </select>
-        </div>
+            {/* Type */}
+            <div className="col-md-6">
+              <label className="form-label">Type</label>
+              <select
+                className="form-select"
+                value={form.type}
+                onChange={(e) => setForm({ ...form, type: e.target.value })}
+                required
+              >
+                <option value="text">Text</option>
+                <option value="image">Image</option>
+                <option value="video">Video</option>
+              </select>
+            </div>
 
-        <div className="col-12">
-          <label className="form-label">
-            {form.type === "text" ? "Text Content" : "File URL"}
-          </label>
-          <input
-            type="text"
-            className="form-control"
-            placeholder={
-              form.type === "text" ? "Enter message text" : "Enter file URL"
-            }
-            value={form.content}
-            onChange={(e) => setForm({ ...form, content: e.target.value })}
-            required
-          />
-        </div>
+            {/* Content / File URL */}
+            <div className="col-12">
+              <label className="form-label">
+                {form.type === "text" ? "Text Content" : "File URL"}
+              </label>
+              <input
+                type="text"
+                className="form-control"
+                placeholder={
+                  form.type === "text"
+                    ? "Enter message text"
+                    : "Enter file URL"
+                }
+                value={form.content}
+                onChange={(e) => setForm({ ...form, content: e.target.value })}
+                required
+              />
+            </div>
 
-        <div className="col-md-6">
-          <label className="form-label">Schedule Time</label>
-          <input
-            type="datetime-local"
-            className="form-control"
-            value={form.schedule}
-            onChange={(e) => setForm({ ...form, schedule: e.target.value })}
-            required
-          />
-        </div>
+            {/* Schedule */}
+            <div className="col-md-6">
+              <label className="form-label">Schedule Time</label>
+              <input
+                type="datetime-local"
+                className="form-control"
+                value={form.schedule}
+                onChange={(e) =>
+                  setForm({ ...form, schedule: e.target.value })
+                }
+                required
+              />
+            </div>
 
-        <div className="col-12">
-          <button type="submit" className="btn btn-primary">
-            Submit Content
-          </button>
+            {/* Buttons */}
+            <div className="col-12 mt-3">
+              <button type="submit" className="btn btn-primary me-2">
+                Submit Content
+              </button>
+              <button
+                type="button"
+                className="btn btn-secondary"
+                onClick={() => setForm({ title: "", type: "text", content: "", schedule: "" })}
+              >
+                Reset
+              </button>
+            </div>
+          </form>
         </div>
-      </form>
+      </div>
     </div>
   );
 }
