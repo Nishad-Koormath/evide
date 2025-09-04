@@ -2,6 +2,7 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./globals.css";
 import { usePathname } from "next/navigation";
+import Link from "next/link";
 
 
 export default function RootLayout({ children }) {
@@ -16,22 +17,22 @@ export default function RootLayout({ children }) {
                 <h2 className="fs-4 text-white mb-4">Dashboard</h2>
                 <ul className="nav flex-column">
                   <li className="nav-item mb-2">
-                    <a
+                    <Link
                       className={`nav-link text-white rounded px-2 py-1 ${
                         pathname === "/" ? "bg-secondary" : ""
                       }`}
                       href="/"
                     >
                       Content List
-                    </a>
+                    </Link>
                   </li>
                   <li className="nav-item mb-2">
-                    <a
+                    <Link
                       className={`nav-link text-white rounded px-2 py-1 ${
                         pathname === "/add-content" ? "bg-secondary" : ""
                       }`}
                       href="/add-content"
-                    >Add content</a>
+                    >Add content</Link>
                   </li>
                 </ul>
               </div>
